@@ -1,10 +1,11 @@
 apply plugin: 'org.springframework.boot'
 
 dependencies {
+    implementation project(':reactive-web')
     implementation project(':model')
     implementation project(':usecase')
-    implementation 'org.springframework.boot:spring-boot-starter'
-    runtimeOnly('org.springframework.boot:spring-boot-devtools')
+    implementation 'org.springframework.boot:spring-boot-starter:2.5.5'
+    runtimeOnly('org.springframework.boot:spring-boot-devtools:2.5.5')
 }
 
 task explodedJar(type: Copy) {

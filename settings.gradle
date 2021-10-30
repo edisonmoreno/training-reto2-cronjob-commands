@@ -3,9 +3,8 @@ rootProject.name = 'ms-commands'
 include ':app-service'
 include ':model'
 include ':usecase'
-include ':domain-base'
+include ':reactive-web'
 project(':app-service').projectDir = file('./applications/app-service')
 project(':model').projectDir = file('./domain/model')
 project(':usecase').projectDir = file('./domain/usecase')
-project(':domain-base').projectDir = file('./domain/domain-base')
-
+project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')

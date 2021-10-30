@@ -1,4 +1,4 @@
-package com.edisonmoreno.cronjob.domainbase;
+package com.edisonmoreno.cronjob.model.base;
 
 import lombok.Getter;
 import lombok.Setter;
