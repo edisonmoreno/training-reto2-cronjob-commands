@@ -1,6 +1,7 @@
 package com.edisonmoreno.cronjob.api;
 
 import com.edisonmoreno.cronjob.infra.MessageService;
+import com.edisonmoreno.cronjob.model.base.ApiResponseDTO;
 import com.edisonmoreno.cronjob.model.command.CreateCronJobCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,12 @@ public class Handler {
                 .doOnNext(messageService::send)
                 .flatMap(createCronJobCommand -> ServerResponse
                         .ok()
-                        .body(Mono.just(createCronJobCommand.getName()), String.class))
+                        .body(Mono.just(ApiResponseDTO.builder()
+                                .aggregateId(createCronJobCommand.getCronJobId())
+                                .typeName(createCronJobCommand.getType())
+                                .status("OK")
+                                .message("Success!")
+                                .build()), ApiResponseDTO.class))
                 .doOnError(error -> log.error("ERROR: {}", error.getMessage()))
                 ;
     }

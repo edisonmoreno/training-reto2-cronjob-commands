@@ -42,7 +42,7 @@ public class MessageService {
     }
 
     public void onApplicationStart() throws IOException, TimeoutException {
-        Connection connection = rabbitMQConnect(); //rabbitMQClient.connect();
+        Connection connection = rabbitMQConnect();
         channel = connection.createChannel();
         channel.exchangeDeclare(EXCHANGE, BuiltinExchangeType.TOPIC, true);
 
@@ -62,12 +62,12 @@ public class MessageService {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, StandardCharsets.UTF_8);
-                log.info("Receiving command: {}", message);
+                log.info("MessageService.setupReceivingForCommand(): {}", message);
                 try {
                     Command command = CommandSerializer.instance()
                             .deserialize(message, Class.forName(properties.getContentType()));
 
-                    eventbus.publishEvent(command); //eventbus.post(command); //bus.publish(command.getType(), command);
+                    eventbus.publishEvent(command);
                 } catch (ClassNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -80,7 +80,7 @@ public class MessageService {
             @Override
             public void handleDelivery(String consumerTag, Envelope envelope, AMQP.BasicProperties properties, byte[] body) throws IOException {
                 String message = new String(body, StandardCharsets.UTF_8);
-                log.info("Receiving event: {}", message);
+                log.info("MessageService.setupReceivingForEvent(): {}", message);
                 try {
                     DomainEvent event = EventSerializer.instance()
                             .deserialize(message, Class.forName(properties.getContentType()));
@@ -94,13 +94,7 @@ public class MessageService {
     }
 
     public void send(Command command) {
-        try {
-            log.info("Prepare command");
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("Send command");
+        log.info("MessageService.Send(command)");
         try {
             String message = CommandSerializer.instance().serialize(command);
             AMQP.BasicProperties props = new AMQP.BasicProperties.Builder().contentType(command.getClass().getTypeName()).build();
@@ -111,13 +105,7 @@ public class MessageService {
     }
 
     public void send(DomainEvent event) {
-        try {
-            log.info("Prepare event");
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        log.info("Send event");
+        log.info("MessageService.Send(event)");
         try {
             String message = EventSerializer.instance().serialize(event);
             AMQP.BasicProperties props = new AMQP.BasicProperties.Builder().contentType(event.getClass().getTypeName()).build();

@@ -10,7 +10,7 @@ public abstract class DomainEvent implements Serializable {
     private String aggregateId;
     private final String id;
 
-    public DomainEvent(String type){
+    public DomainEvent(String type) {
         this.id = UUID.randomUUID().toString();
         this.type = type;
         this.instant = Instant.now();
@@ -26,7 +26,7 @@ public abstract class DomainEvent implements Serializable {
     }
 
 
-    public  void setAggregateId(String aggregateId){
+    public void setAggregateId(String aggregateId) {
         this.aggregateId = aggregateId;
     }
 

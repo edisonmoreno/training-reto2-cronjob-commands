@@ -2,6 +2,7 @@ package com.edisonmoreno.cronjob.infra;
 
 
 import com.edisonmoreno.cronjob.helper.AbstractSerializer;
+import com.edisonmoreno.cronjob.model.EventStore;
 
 public final class StoredEventSerializer extends AbstractSerializer {
 
@@ -20,12 +21,12 @@ public final class StoredEventSerializer extends AbstractSerializer {
     }
 
 
-    public StoredEvent deserialize(String aSerialization, Class<StoredEvent> aType) {
+    public EventStore deserialize(String aSerialization, Class<EventStore> aType) {
         return gson.fromJson(aSerialization, aType);
     }
 
 
-    public String serialize(StoredEvent object) {
+    public String serialize(EventStore object) {
         return gson.toJson(object);
     }
 
