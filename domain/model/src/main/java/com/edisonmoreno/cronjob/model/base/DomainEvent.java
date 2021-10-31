@@ -5,10 +5,10 @@ import java.time.Instant;
 import java.util.UUID;
 
 public abstract class DomainEvent implements Serializable {
+    private final String id;
     private final String type;
     private final Instant instant;
     private String aggregateId;
-    private final String id;
 
     public DomainEvent(String type) {
         this.id = UUID.randomUUID().toString();

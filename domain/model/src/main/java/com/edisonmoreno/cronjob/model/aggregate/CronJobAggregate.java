@@ -26,8 +26,7 @@ public class CronJobAggregate extends AggregateRoot implements EventChange {
 
     public void addExecutions() {
         executions.forEach(executionData -> {
-            appendChange(new ExecutionCreated(executionData.getInstant(), executionData.getState(),
-                    executionData.getDuration()));
+            appendChange(new ExecutionCreated(executionData.getState(), executionData.getDuration()));
         });
     }
 }

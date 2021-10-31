@@ -11,11 +11,11 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class CreateCronJobUseCase extends UseCase {
-    final Logger LOG = Logger.getLogger("usecase.CreateCronJobUseCase");
+    final Logger logger = Logger.getLogger("usecase.CreateCronJobUseCase");
 
     @Override
     public List<DomainEvent> apply(Command command) {
-        LOG.info(String.format("command.apply: %s", command));
+        logger.info(String.format("command.apply: %s", command));
         CreateCronJobCommand createCommand = (CreateCronJobCommand) command;
         CronJobAggregate aggregate = new CronJobAggregate(CronJob.builder()
                 .cronJobId(createCommand.getCronJobId())

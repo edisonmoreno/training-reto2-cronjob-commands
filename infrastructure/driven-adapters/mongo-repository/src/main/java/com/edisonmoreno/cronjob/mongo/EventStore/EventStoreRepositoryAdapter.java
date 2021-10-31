@@ -15,7 +15,6 @@ import java.util.UUID;
 @Slf4j
 @Repository
 public class EventStoreRepositoryAdapter extends AdapterOperations<EventStore, EventStoreDocument, String, EventStoreMongoRepository> implements EventStoreRepository {
-
     public EventStoreRepositoryAdapter(EventStoreMongoRepository repository, ObjectMapper mapper) {
         /**
          *  Could be use mapper.mapBuilder if your domain model implement builder pattern
@@ -40,6 +39,7 @@ public class EventStoreRepositoryAdapter extends AdapterOperations<EventStore, E
                 .eventBody(eventStore.getEventBody())
                 .build();
 
+        //Todo: Separate in other database
         repository.save(document)
                 .doOnSuccess(eventStoreDocument -> log.info("EventStoreRepositoryAdapter.saveEvent: {}", eventStoreDocument.toString()))
                 .subscribe();

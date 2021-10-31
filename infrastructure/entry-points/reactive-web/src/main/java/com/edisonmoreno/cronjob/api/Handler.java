@@ -42,5 +42,9 @@ public class Handler {
                 .doOnError(error -> log.error("ERROR: {}", error.getMessage()))
                 ;
     }
+
+    public Mono<ServerResponse> CronJobExecution(ServerRequest serverRequest) {
+        return null;
+    }
 }
 
