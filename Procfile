@@ -1,1 +1,1 @@
-web: java -jar applications/app-service/build/libs/app-service.jar
+web: java -Dserver.port=$PORT -jar applications/app-service/build/libs/app-service.jar
