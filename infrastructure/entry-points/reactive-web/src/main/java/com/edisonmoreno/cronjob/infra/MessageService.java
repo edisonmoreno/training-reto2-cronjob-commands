@@ -1,6 +1,7 @@
 package com.edisonmoreno.cronjob.infra;
 
-import com.edisonmoreno.cronjob.helper.CommandSerializer;
+import com.edisonmoreno.cronjob.common.EventSerializer;
+import com.edisonmoreno.cronjob.common.CommandSerializer;
 import com.edisonmoreno.cronjob.model.base.Command;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
 import com.rabbitmq.client.*;

@@ -3,6 +3,7 @@ package com.edisonmoreno.cronjob.api;
 import com.edisonmoreno.cronjob.infra.MessageService;
 import com.edisonmoreno.cronjob.model.base.ApiResponseDTO;
 import com.edisonmoreno.cronjob.model.command.CreateCronJobCommand;
+import com.edisonmoreno.cronjob.model.command.ExecutionCronJobCommand;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -36,15 +37,25 @@ public class Handler {
                         .body(Mono.just(ApiResponseDTO.builder()
                                 .aggregateId(createCronJobCommand.getCronJobId())
                                 .typeName(createCronJobCommand.getType())
-                                .status("OK")
+                                .state("OK")
                                 .message("Success!")
                                 .build()), ApiResponseDTO.class))
-                .doOnError(error -> log.error("ERROR: {}", error.getMessage()))
-                ;
+                .doOnError(error -> log.error("ERROR: {}", error.getMessage()));
     }
 
     public Mono<ServerResponse> CronJobExecution(ServerRequest serverRequest) {
-        return null;
+        Mono<ExecutionCronJobCommand> commandMono = serverRequest.bodyToMono(ExecutionCronJobCommand.class);
+        return commandMono
+                .doOnNext(messageService::send)
+                .flatMap(executionCronJobCommand -> ServerResponse
+                        .ok()
+                        .body(Mono.just(ApiResponseDTO.builder()
+                                .aggregateId(executionCronJobCommand.getCronJobId())
+                                .typeName(executionCronJobCommand.getType())
+                                .state("OK")
+                                .message("Success!")
+                                .build()), ApiResponseDTO.class))
+                .doOnError(error -> log.error("ERROR: {}", error.getMessage()));
     }
 }
 

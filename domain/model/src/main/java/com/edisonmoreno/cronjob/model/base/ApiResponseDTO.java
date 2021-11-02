@@ -10,6 +10,6 @@ import lombok.Setter;
 public class ApiResponseDTO {
     private String aggregateId;
     private String typeName;
-    private String status;
+    private String state;
     private String message;
 }

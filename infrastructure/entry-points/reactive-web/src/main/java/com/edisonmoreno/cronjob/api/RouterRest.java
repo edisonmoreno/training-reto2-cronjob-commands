@@ -15,9 +15,9 @@ public class RouterRest {
     @Bean
     public RouterFunction<ServerResponse> routerFunction(Handler handler) {
         return route(GET("/api/usecase/path"), handler::listenGETUseCase)
-                .andRoute(POST("/api/cronjob/create"), handler::CronJobCreate)
-                .andRoute(POST("/api/cronjob/execution"), handler::CronJobExecution)
-                .and(route(GET("/api/otherusercase/path"), handler::listenGETOtherUseCase));
-
+                .and(route(GET("/api/otherusercase/path"), handler::listenGETOtherUseCase))
+                .and(route(POST("/api/cronjob/create"), handler::CronJobCreate)
+                        .andRoute(POST("/api/cronjob/execution"), handler::CronJobExecution)
+                );
     }
 }

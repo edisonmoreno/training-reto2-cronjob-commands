@@ -1,5 +1,6 @@
 package com.edisonmoreno.cronjob.mongo.EventStore;
 
+import com.edisonmoreno.cronjob.common.EventSerializer;
 import com.edisonmoreno.cronjob.model.EventStore;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
 import com.edisonmoreno.cronjob.model.repository.EventStoreRepository;
@@ -8,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.reactivecommons.utils.ObjectMapper;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,7 +27,21 @@ public class EventStoreRepositoryAdapter extends AdapterOperations<EventStore, E
 
     @Override
     public List<DomainEvent> getEventsBy(String aggregateName, String aggregateRootId) {
-        return Collections.emptyList();
+        List<DomainEvent> events = new ArrayList<>();
+        repository.findByAggregateId(aggregateRootId)
+                .map(document -> {
+                    String eventBody = document.getEventBody();
+                    try {
+                        return (DomainEvent) EventSerializer
+                                .instance()
+                                .deserialize(eventBody, Class.forName(document.getTypeName()));
+                    } catch (ClassNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
+                .toIterable()
+                .forEach(events::add);
+        return events;
     }
 
     @Override

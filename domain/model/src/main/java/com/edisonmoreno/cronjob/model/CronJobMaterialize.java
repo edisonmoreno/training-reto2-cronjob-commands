@@ -17,5 +17,5 @@ public class CronJobMaterialize {
     private String timeout;
     private String retry;
     private String email;
-    private Set<ExecutionData> executions;
+    private Set<Execution> executions;
 }

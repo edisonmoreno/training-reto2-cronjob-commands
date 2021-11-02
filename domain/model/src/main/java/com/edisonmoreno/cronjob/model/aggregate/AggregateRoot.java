@@ -1,24 +1,34 @@
 package com.edisonmoreno.cronjob.model.aggregate;
 
+import com.edisonmoreno.cronjob.model.base.ChangeEventSubscriber;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
+import com.edisonmoreno.cronjob.model.base.EventChange;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AggregateRoot {
     private final String id;
-    private final List<DomainEvent> changes = new ArrayList<>();
+    private final ChangeEventSubscriber changeEventSubscriber;
 
     protected AggregateRoot(String id) {
         this.id = id;
+        this.changeEventSubscriber = new ChangeEventSubscriber();
     }
 
-    protected void appendChange(DomainEvent event) {
+    protected final void subscribe(EventChange eventChange) {
+        changeEventSubscriber.subscribe(eventChange);
+    }
+
+    protected ChangeEventSubscriber.ChangeApply appendChange(DomainEvent event) {
         event.setAggregateId(id);
-        changes.add(event);
+        return changeEventSubscriber.appendChange(event);
+    }
+
+    protected void applyEvent(DomainEvent domainEvent) {
+        changeEventSubscriber.applyEvent(domainEvent);
     }
 
     public List<DomainEvent> getUncommittedChanges() {
-        return List.copyOf(changes);
+        return List.copyOf(changeEventSubscriber.getChanges());
     }
 }

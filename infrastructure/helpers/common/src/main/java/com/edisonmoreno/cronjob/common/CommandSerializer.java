@@ -1,4 +1,4 @@
-package com.edisonmoreno.cronjob.helper;
+package com.edisonmoreno.cronjob.common;
 
 import com.edisonmoreno.cronjob.model.base.Command;
 

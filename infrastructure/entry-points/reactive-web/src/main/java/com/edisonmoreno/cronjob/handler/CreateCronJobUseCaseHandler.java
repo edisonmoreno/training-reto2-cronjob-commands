@@ -23,9 +23,10 @@ public class CreateCronJobUseCaseHandler extends AbstractUseCaseHandler implemen
     @Override
     @EventListener({CreateCronJobCommand.class})
     public void consume(Command command) {
-        log.info("handler.consume: {}", command);
+        log.info("CreateCronJobUseCaseHandler.consume: {}", command);
+        CreateCronJobCommand createCommand = (CreateCronJobCommand) command;
         List<DomainEvent> events = createCronJobUseCase.apply(command);
-        persistentEvent("CronJob", ((CreateCronJobCommand) command).getCronJobId(), events);
+        persistentEvent("CronJob", createCommand.getCronJobId(), events);
 
     }
 

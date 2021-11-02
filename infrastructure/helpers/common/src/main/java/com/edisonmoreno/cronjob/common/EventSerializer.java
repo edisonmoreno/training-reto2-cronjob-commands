@@ -1,6 +1,5 @@
-package com.edisonmoreno.cronjob.infra;
+package com.edisonmoreno.cronjob.common;
 
-import com.edisonmoreno.cronjob.helper.AbstractSerializer;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
 
 import java.lang.reflect.Type;

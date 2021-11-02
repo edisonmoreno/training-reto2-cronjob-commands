@@ -10,3 +10,5 @@ project(':usecase').projectDir = file('./domain/usecase')
 project(':reactive-web').projectDir = file('./infrastructure/entry-points/reactive-web')
 include ':mongo-repository'
 project(':mongo-repository').projectDir = file('./infrastructure/driven-adapters/mongo-repository')
+include ':common'
+project(':common').projectDir = file('./infrastructure/helpers/common')

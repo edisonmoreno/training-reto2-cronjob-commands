@@ -17,4 +17,9 @@ public class MaterializeCronJobUseCase {
         logger.info(String.format("MaterializeCronJobUseCase.save(%s)", cronJobMaterialize));
         repository.save(cronJobMaterialize);
     }
+
+    public void saveExecution(CronJobMaterialize cronJobMaterialize) {
+        logger.info(String.format("MaterializeCronJobUseCase.saveExecution(%s)", cronJobMaterialize));
+        repository.saveExecution(cronJobMaterialize);
+    }
 }

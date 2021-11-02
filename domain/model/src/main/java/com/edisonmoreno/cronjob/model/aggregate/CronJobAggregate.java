@@ -1,32 +1,58 @@
 package com.edisonmoreno.cronjob.model.aggregate;
 
 import com.edisonmoreno.cronjob.model.CronJob;
-import com.edisonmoreno.cronjob.model.ExecutionData;
+import com.edisonmoreno.cronjob.model.Execution;
+import com.edisonmoreno.cronjob.model.base.DomainEvent;
 import com.edisonmoreno.cronjob.model.base.EventChange;
 import com.edisonmoreno.cronjob.model.event.CronJobCreated;
 import com.edisonmoreno.cronjob.model.event.ExecutionCreated;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Set;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Setter
 @Getter
 public class CronJobAggregate extends AggregateRoot implements EventChange {
     private CronJob cronJob;
-    private Set<ExecutionData> executions;
-    //ToDo: AggregateId, cronJobId, Instant (Command)
-    //ToDo: addExecutions
+    private Map<String, ExecutionAggregate> executions;
 
     public CronJobAggregate(CronJob cronJob) {
         super(cronJob.getCronJobId());
         appendChange(new CronJobCreated(cronJob.getName(), cronJob.getUrl(), cronJob.getCronExpression(),
-                cronJob.getTimeout(), cronJob.getRetry(), cronJob.getEmail()));
+                cronJob.getTimeout(), cronJob.getRetry(), cronJob.getEmail())).apply();
     }
 
-    public void addExecutions() {
-        executions.forEach(executionData -> {
-            appendChange(new ExecutionCreated(executionData.getState(), executionData.getDuration()));
+    public CronJobAggregate(String id) {
+        super(id);
+        subscribe(this);
+        listener((CronJobCreated event) -> {
+            this.setCronJob(CronJob.builder()
+                    .cronJobId(event.getId())
+                    .name(event.getName())
+                    .url(event.getUrl())
+                    .cronExpression(event.getCronExpression())
+                    .timeout(event.getTimeout())
+                    .retry(event.getRetry())
+                    .email(event.getEmail())
+                    .build());
+
+            this.executions = new HashMap<>();
         });
+        listener((ExecutionCreated event) -> {
+            executions.put(event.getId(), new ExecutionAggregate(event.getId(), event.getState(), event.getDuration(), event.getDate()));
+        });
+    }
+
+    public void addExecution(Execution execution) {
+        appendChange(new ExecutionCreated(execution.getState(), execution.getDuration(), execution.getDate())).apply();
+    }
+
+    public static CronJobAggregate from(String cronJobId, List<DomainEvent> events) {
+        CronJobAggregate aggregate = new CronJobAggregate(cronJobId);
+        events.forEach(aggregate::applyEvent);
+        return aggregate;
     }
 }
