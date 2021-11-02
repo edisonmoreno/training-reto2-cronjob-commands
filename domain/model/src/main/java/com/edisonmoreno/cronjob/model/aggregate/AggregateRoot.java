@@ -4,6 +4,7 @@ import com.edisonmoreno.cronjob.model.base.ChangeEventSubscriber;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
 import com.edisonmoreno.cronjob.model.base.EventChange;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AggregateRoot {
@@ -29,6 +30,6 @@ public abstract class AggregateRoot {
     }
 
     public List<DomainEvent> getUncommittedChanges() {
-        return List.copyOf(changeEventSubscriber.getChanges());
+        return new ArrayList<>(changeEventSubscriber.getChanges()); // List.copyOf(changeEventSubscriber.getChanges());
     }
 }
