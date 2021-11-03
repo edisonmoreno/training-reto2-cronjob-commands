@@ -22,6 +22,8 @@ public class CronJobDocument {
     private String timeout;
     private String retry;
     private String email;
+    private Integer totalSuccessful;
+    private Integer totalFailed;
     private Set<Execution> executions;
 }
 

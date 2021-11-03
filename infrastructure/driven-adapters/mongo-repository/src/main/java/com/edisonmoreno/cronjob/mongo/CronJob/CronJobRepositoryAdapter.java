@@ -51,6 +51,10 @@ public class CronJobRepositoryAdapter extends AdapterOperations<CronJob, CronJob
                             .executions(updateExecutions)
                             .build();
                 })
+                .map(cronJobDocument -> cronJobDocument.toBuilder()
+                        .totalSuccessful((int) cronJobDocument.getExecutions().stream().filter(execution -> execution.getState().equals("SUCCESS")).count())
+                        .totalFailed((int) cronJobDocument.getExecutions().stream().filter(execution -> execution.getState().equals("FAILED")).count())
+                        .build())
                 .flatMap(repository::save)
                 .doOnSuccess(cronJobDocument -> log.info("CronJobRepositoryAdapter.saveExecution: {}", cronJobDocument.toString()))
                 .subscribe();
