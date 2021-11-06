@@ -7,12 +7,14 @@ public class ExecutionAggregate {
     private final String state;
     private final long duration;
     private final Instant date;
+    private final String httpCode;
 
-    public ExecutionAggregate(String id, String state, long duration, Instant date) {
+    public ExecutionAggregate(String id, String state, long duration, Instant date, String httpCode) {
         this.id = id;
         this.state = state;
         this.duration = duration;
         this.date = date;
+        this.httpCode = httpCode;
     }
 
     public String id() {
@@ -29,5 +31,9 @@ public class ExecutionAggregate {
 
     public Instant date() {
         return date;
+    }
+
+    public String httpCode() {
+        return httpCode;
     }
 }

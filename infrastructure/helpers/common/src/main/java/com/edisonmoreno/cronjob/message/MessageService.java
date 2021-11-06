@@ -1,4 +1,4 @@
-package com.edisonmoreno.cronjob.infra;
+package com.edisonmoreno.cronjob.message;
 
 import com.edisonmoreno.cronjob.common.EventSerializer;
 import com.edisonmoreno.cronjob.common.CommandSerializer;

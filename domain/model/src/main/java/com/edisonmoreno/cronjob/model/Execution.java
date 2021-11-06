@@ -13,4 +13,5 @@ public class Execution {
     private String state;
     private long duration;
     private Instant date;
+    private String httpCode;
 }

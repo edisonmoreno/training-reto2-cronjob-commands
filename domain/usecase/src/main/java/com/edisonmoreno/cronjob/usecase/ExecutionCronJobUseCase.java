@@ -29,6 +29,7 @@ public class ExecutionCronJobUseCase extends UseCase {
                 .duration(executionCommand.getDuration())
                 .state(executionCommand.getState())
                 .date(executionCommand.getDate())
+                .httpCode(executionCommand.getHttpCode())
                 .build());
         return cronJob.getUncommittedChanges();
     }

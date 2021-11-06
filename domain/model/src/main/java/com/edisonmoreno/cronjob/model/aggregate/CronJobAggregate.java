@@ -25,7 +25,7 @@ public class CronJobAggregate extends AggregateRoot implements EventChange {
                 cronJob.getTimeout(), cronJob.getRetry(), cronJob.getEmail())).apply();
     }
 
-    public CronJobAggregate(String id) {
+    private CronJobAggregate(String id) {
         super(id);
         subscribe(this);
         listener((CronJobCreated event) -> {
@@ -42,12 +42,12 @@ public class CronJobAggregate extends AggregateRoot implements EventChange {
             this.executions = new HashMap<>();
         });
         listener((ExecutionCreated event) -> {
-            executions.put(event.getId(), new ExecutionAggregate(event.getId(), event.getState(), event.getDuration(), event.getDate()));
+            executions.put(event.getId(), new ExecutionAggregate(event.getId(), event.getState(), event.getDuration(), event.getDate(), event.getHttpCode()));
         });
     }
 
     public void addExecution(Execution execution) {
-        appendChange(new ExecutionCreated(execution.getState(), execution.getDuration(), execution.getDate())).apply();
+        appendChange(new ExecutionCreated(execution.getState(), execution.getDuration(), execution.getDate(), execution.getHttpCode())).apply();
     }
 
     public static CronJobAggregate from(String cronJobId, List<DomainEvent> events) {

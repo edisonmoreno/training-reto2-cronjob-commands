@@ -2,8 +2,8 @@ dependencies {
     implementation project(':usecase')
     implementation project(':model')
     implementation project(':common')
-    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.5'
-    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.5'
+    implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.6'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator:2.5.6'
 
-    implementation("com.rabbitmq:amqp-client:5.13.1")
+
 }

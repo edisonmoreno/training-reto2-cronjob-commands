@@ -13,4 +13,5 @@ public class ExecutionCronJobCommand extends Command {
     private String state;
     private long duration;
     private Instant date;
+    private String httpCode;
 }

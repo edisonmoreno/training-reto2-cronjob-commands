@@ -12,12 +12,14 @@ public class ExecutionCreated extends DomainEvent {
     private String state;
     private long duration;
     private Instant date;
+    private String httpCode;
 
-    public ExecutionCreated(String state, long duration, Instant date) {
+    public ExecutionCreated(String state, long duration, Instant date, String httpCode) {
         super("ms-commands.event.cronjob.execution");
         this.state = state;
         this.duration = duration;
         this.date = date;
+        this.httpCode = httpCode;
     }
 }
 

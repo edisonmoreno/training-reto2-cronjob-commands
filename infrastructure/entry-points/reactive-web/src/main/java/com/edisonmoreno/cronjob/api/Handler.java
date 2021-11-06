@@ -1,6 +1,6 @@
 package com.edisonmoreno.cronjob.api;
 
-import com.edisonmoreno.cronjob.infra.MessageService;
+import com.edisonmoreno.cronjob.message.MessageService;
 import com.edisonmoreno.cronjob.model.base.ApiResponseDTO;
 import com.edisonmoreno.cronjob.model.command.CreateCronJobCommand;
 import com.edisonmoreno.cronjob.model.command.ExecutionCronJobCommand;

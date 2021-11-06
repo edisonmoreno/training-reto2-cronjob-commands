@@ -1,7 +1,7 @@
 package com.edisonmoreno.cronjob.handler;
 
 import com.edisonmoreno.cronjob.common.EventSerializer;
-import com.edisonmoreno.cronjob.infra.MessageService;
+import com.edisonmoreno.cronjob.message.MessageService;
 import com.edisonmoreno.cronjob.model.EventStore;
 import com.edisonmoreno.cronjob.model.base.DomainEvent;
 import com.edisonmoreno.cronjob.model.repository.EventStoreRepository;

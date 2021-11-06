@@ -44,6 +44,7 @@ public class MaterializeCronJobUseCaseHandler {
                 .state(event.getState())
                 .duration(event.getDuration())
                 .date(event.getDate())
+                .httpCode(event.getHttpCode())
                 .build());
 
         CronJobMaterialize materialize = CronJobMaterialize.builder()
