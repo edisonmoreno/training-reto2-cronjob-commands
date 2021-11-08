@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AggregateRoot {
+
     private final String id;
     private final ChangeEventSubscriber changeEventSubscriber;
 

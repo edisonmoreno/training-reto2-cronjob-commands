@@ -15,4 +15,6 @@ public class CronJob {
     private String timeout;
     private String retry;
     private String email;
+    private Integer totalSuccessful;
+    private Integer totalFailed;
 }

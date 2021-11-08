@@ -12,6 +12,7 @@ import lombok.Setter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Setter
 @Getter
@@ -22,13 +23,12 @@ public class CronJobAggregate extends AggregateRoot implements EventChange {
     public CronJobAggregate(CronJob cronJob) {
         super(cronJob.getCronJobId());
         appendChange(new CronJobCreated(cronJob.getName(), cronJob.getUrl(), cronJob.getCronExpression(),
-                cronJob.getTimeout(), cronJob.getRetry(), cronJob.getEmail())).apply();
+                cronJob.getTimeout(), cronJob.getRetry(), cronJob.getEmail(), cronJob.getTotalSuccessful(), cronJob.getTotalFailed())).apply();
     }
 
     private CronJobAggregate(String id) {
         super(id);
-        subscribe(this);
-        listener((CronJobCreated event) -> {
+        this.listener((CronJobCreated event) -> {
             this.setCronJob(CronJob.builder()
                     .cronJobId(event.getId())
                     .name(event.getName())
@@ -37,17 +37,28 @@ public class CronJobAggregate extends AggregateRoot implements EventChange {
                     .timeout(event.getTimeout())
                     .retry(event.getRetry())
                     .email(event.getEmail())
+                    .totalSuccessful(Optional.ofNullable(event.getTotalSuccessful()).orElse(0))
+                    .totalFailed(Optional.ofNullable(event.getTotalFailed()).orElse(0))
                     .build());
 
             this.executions = new HashMap<>();
         });
-        listener((ExecutionCreated event) -> {
+        this.listener((ExecutionCreated event) -> {
             executions.put(event.getId(), new ExecutionAggregate(event.getId(), event.getState(), event.getDuration(), event.getDate(), event.getHttpCode()));
         });
+        subscribe(this);
     }
 
     public void addExecution(Execution execution) {
         appendChange(new ExecutionCreated(execution.getState(), execution.getDuration(), execution.getDate(), execution.getHttpCode())).apply();
+        increaseTotal(execution);
+    }
+
+    private void increaseTotal(Execution execution) {
+        if (execution.getState().equals("SUCCESS"))
+            this.cronJob.setTotalSuccessful(this.cronJob.getTotalSuccessful() + 1);
+        if (execution.getState().equals("FAILED"))
+            this.cronJob.setTotalFailed(this.cronJob.getTotalFailed() + 1);
     }
 
     public static CronJobAggregate from(String cronJobId, List<DomainEvent> events) {
